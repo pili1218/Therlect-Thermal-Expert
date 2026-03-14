@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Therlect — Precision Thermal Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Roobert (Evervault heading font) via Fontshare -->
+  <link href="https://api.fontshare.com/v2/css?f[]=roobert@300,400,500,600,700,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Evervault Design System Tokens ── */
+    :root {
+      /* Typography */
+      --font-family-headings:   "Roobert", sans-serif;
+      --font-family-base:       "Inter", system-ui, sans-serif;
+      --font-size-base:         1rem;
+      --line-height-base:       1.55;
+      --line-height-sm:         1.42857;
+      --line-height-h1:         1.1;
+      --line-height-h2:         1.15;
+      --line-height-h3:         1.25;
+
+      /* Spacing tokens (rem) */
+      --token-04:  0.2rem;
+      --token-08:  0.4rem;
+      --token-12:  0.6rem;
+      --token-16:  0.8rem;
+      --token-20:  1rem;
+      --token-24:  1.2rem;
+      --token-32:  1.6rem;
+      --token-40:  2rem;
+      --token-48:  2.4rem;
+      --token-56:  2.8rem;
+      --token-64:  3.2rem;
+      --token-80:  4rem;
+      --token-96:  4.8rem;
+      --token-128: 6.4rem;
+
+      /* Border radius */
+      --radius-round: 50%;
+      --radius-lg:    var(--token-32);   /* 1.6rem ≈ 25px */
+      --radius-md:    var(--token-24);   /* 1.2rem ≈ 19px */
+      --radius-sm:    var(--token-12);   /* 0.6rem ≈ 10px */
+      --radius-xs:    var(--token-08);   /* 0.4rem ≈ 6px  */
+      --radius-xxs:   var(--token-04);   /* 0.2rem ≈ 3px  */
+
+      /* Shadows */
+      --shadow-sm:    #32325d14 0 8px 18px -4px;
+      --shadow-md:    #32325d40 0 12px 28px -4px;
+
+      /* Easing */
+      --ease-in-out:   cubic-bezier(.45, 0, .55, 1);
+      --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+
+      /* Evervault grey scale */
+      --grey-00:  #fff;
+      --grey-10:  #f4f4ff;
+      --grey-20:  #ececfb;
+      --grey-30:  #dfe1f4;
+      --grey-40:  #babcd2;
+      --grey-50:  #9fa2b9;
+      --grey-60:  #5e6077;
+      --grey-70:  #383a4d;
+      --grey-80:  #2a2b3a;
+      --grey-85:  #212230;
+      --grey-90:  #171825;
+      --grey-95:  #0b0d1c;
+      --grey-100: #010314;
+
+      /* Brand */
+      --primary:        #6633ee;   /* shorthand: #63e */
+      --primary-light:  #8e64ff;
+      --error:          #e23453;
+
+      /* Semantic colours */
+      --bg-body:         var(--grey-100);
+      --bg-body-rgba:    rgba(1, 3, 20, 0);      /* transparent version for gradient */
+      --bg-body-alt:     rgba(22, 8, 70, 0.45);  /* subtle violet tint at top/bottom */
+      --border-color:    var(--grey-80);
+      --text-body:       var(--grey-30);
+      --text-headings:   #fff;
+      --text-subtle:     var(--grey-50);
+      --text-muted:      var(--grey-40);
+      --text-highlight:  #8859ff33;
+
+      /* Material / glass effect */
+      --material-effect: 0 0 0 2px #0000000d, 0 0 0 1px #ffffff1a, inset 0 .5px 0 #ffffff80;
+
+      /* Button tokens */
+      --btn-bg-primary:        #855cf1cc;
+      --btn-bg-primary-hover:  #855cf1cc;
+      --btn-color-primary:     #fff;
+      --btn-bg-secondary:      #342c41cc;
+      --btn-bg-secondary-hover:#342c41cc;
+      --btn-color-secondary:   var(--text-headings);
+      --btn-shadow:            inset 0 1px 0 #ffffff1a, 0 1px 0 #0000000d;
+
+      /* Aliases used in CSS below */
+      --bg:           var(--bg-body);
+      --bg-card:      var(--grey-95);
+      --bg-elev:      var(--grey-90);
+      --bg-elevated:  var(--grey-90);   /* alias */
+      --border:       var(--border-color);
+      --txt-h:        var(--text-headings);
+      --txt-b:        var(--text-body);
+      --txt-m:        var(--text-subtle);
+      --txt-s:        var(--grey-60);
+    }
+
+    /* ── Base ── */
+    body {
+      background-color:  var(--bg-body);
+      background-image:
+        linear-gradient(to bottom, var(--bg-body-rgba) 0%, var(--bg-body-alt) 40%, var(--bg-body-rgba) 100%),
+        linear-gradient(to top,   var(--bg-body-alt) 0%, var(--bg-body-rgba) 100%);
+      background-position: top, bottom;
+      background-repeat:   no-repeat;
+      background-size:     100% 1600px, 100% 800px;
+      font-family:         var(--font-family-base);
+      font-size:           var(--font-size-base);
+      line-height:         var(--line-height-base);
+      color:               var(--text-body);
+      text-rendering:      optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background:              var(--primary);
+      text-shadow:             none;
+      -webkit-text-fill-color: white;
+      color: #fff !important;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.028;
+    }
+
+    /* Heading font class */
+    .f-dis { font-family: var(--font-family-headings); }
+
+    /* Gradient text — electric blue, per user feedback */
+    .tg {
+      background: linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #818cf8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-body); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+
+    /* ── NAV ── */
+    .nav-g {
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      background: rgba(1,3,20,0.9);
+      border-bottom: 1px solid var(--grey-80);
+    }
+    .nl {
+      color: var(--text-subtle); font-size: 0.875rem; font-weight: 500;
+      text-decoration: none;
+      transition: color 0.18s ease;
+    }
+    .nl:hover { color: var(--text-headings); }
+
+    /* ── BUTTONS ── */
+    .bp {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0.58rem 1.35rem; border-radius: var(--radius-lg);
+      background: var(--btn-bg-primary); color: var(--btn-color-primary);
+      font-size: 0.875rem; font-weight: 600;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: var(--btn-shadow), 0 0 22px -6px rgba(133,92,241,0.6);
+      transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease, opacity 0.18s ease;
+    }
+    .bp:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: var(--btn-shadow), 0 0 40px -4px rgba(133,92,241,0.7); }
+    .bp:active { transform: translateY(0); opacity: 1; }
+    .bp:focus-visible { outline: 2px solid rgba(102,51,238,0.7); outline-offset: 3px; border-radius: var(--radius-lg); }
+
+    .bg {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0.58rem 1.35rem; border-radius: var(--radius-lg);
+      background: var(--btn-bg-secondary); border: 1px solid var(--grey-70);
+      color: var(--btn-color-secondary); font-size: 0.875rem; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      transition: transform 0.2s var(--ease-out-expo), opacity 0.18s ease, border-color 0.18s ease;
+    }
+    .bg:hover { opacity: 0.85; border-color: var(--grey-60); transform: translateY(-2px); }
+    .bg:active { transform: translateY(0); opacity: 1; }
+    .bg:focus-visible { outline: 2px solid rgba(102,51,238,0.7); outline-offset: 3px; border-radius: var(--radius-lg); }
+
+    /* ── CARDS ── */
+    .cg {
+      background: var(--grey-90);
+      border: 1px solid var(--grey-80);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+    .cf {
+      background: var(--grey-95); border: 1px solid var(--grey-80); border-radius: var(--radius-sm); padding: var(--token-24);
+      transition: border-color 0.2s ease, transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+    }
+    .cf:hover { border-color: var(--grey-70); transform: translateY(-4px); box-shadow: var(--shadow-md), 0 0 24px -8px rgba(102,51,238,0.25); }
+
+    /* Label pill */
+    .lp {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 0.32rem 0.85rem; border-radius: var(--radius-lg);
+      background: rgba(102,51,238,0.09); border: 1px solid rgba(102,51,238,0.22);
+      color: var(--primary-light); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
+    }
+
+    /* Glowing orb blobs */
+    .orb { border-radius: 50%; pointer-events: none; }
+
+    /* Divider */
+    .hr { height: 1px; background: linear-gradient(90deg, transparent, var(--grey-80) 35%, var(--grey-80) 65%, transparent); }
+
+    /* Check list */
+    .ci { display: flex; align-items: flex-start; gap: var(--token-12); padding: var(--token-20) 0; border-bottom: 1px solid var(--grey-80); }
+    .ci:last-child { border-bottom: none; }
+
+    /* Feature row */
+    .fr { display: flex; align-items: flex-start; gap: var(--token-16); padding: var(--token-16) 0; }
+    .fi {
+      width: 34px; height: 34px; border-radius: var(--radius-xs); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(102,51,238,0.1); border: 1px solid rgba(102,51,238,0.2);
+    }
+
+    /* Terminal */
+    .term { background: var(--grey-95); border: 1px solid var(--grey-80); border-radius: var(--radius-sm); overflow: hidden; }
+    .term-bar { background: var(--grey-90); padding: 0.7rem 1rem; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--grey-80); }
+    .td { width: 10px; height: 10px; border-radius: 50%; }
+    .tc { font-family: ui-monospace, 'SFMono-Regular', 'Roboto Mono', monospace; font-size: 0.8rem; line-height: 1.75; color: var(--grey-40); padding: var(--token-24) var(--token-32); }
+    .tp { color: var(--primary-light); } .tg2 { color: #4ade80; } .tb { color: #60a5fa; } .to { color: #fb923c; } .tco { color: var(--grey-70); }
+
+    /* Trust card */
+    .tc2 {
+      background: var(--grey-95); border: 1px solid var(--grey-80); border-radius: var(--radius-sm);
+      padding: var(--token-24); text-align: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tc2:hover { border-color: var(--grey-70); box-shadow: var(--shadow-sm); }
+
+    /* Chip card */
+    .chip {
+      background: linear-gradient(140deg, #180b48 0%, var(--grey-95) 55%, #14063a 100%);
+      border: 1px solid var(--grey-80); border-radius: var(--radius-md); padding: var(--token-24);
+      position: relative; overflow: hidden;
+      box-shadow: var(--material-effect);
+    }
+    .chip::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(102,51,238,0.12) 0%, transparent 55%);
+    }
+
+    /* Metric row */
+    .mr {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--grey-80); border-radius: var(--radius-xs); padding: var(--token-16) var(--token-20);
+    }
+
+    /* ANIMATIONS — only transform + opacity */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
+    @keyframes float   { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+    @keyframes breath  { 0%,100% { opacity:0.55; } 50% { opacity:1; } }
+
+    .a1  { animation: fadeUp 0.65s var(--ease-out-expo) 0.10s both; }
+    .a2  { animation: fadeUp 0.65s var(--ease-out-expo) 0.22s both; }
+    .a3  { animation: fadeUp 0.65s var(--ease-out-expo) 0.36s both; }
+    .a4  { animation: fadeUp 0.65s var(--ease-out-expo) 0.50s both; }
+    .a5  { animation: fadeIn  0.9s var(--ease-out-expo) 0.30s both; }
+    .fl  { animation: float  5.5s var(--ease-in-out) infinite; }
+    .fl2 { animation: float  5.5s var(--ease-in-out) 0.6s infinite; }
+    .br  { animation: breath 3.2s var(--ease-in-out) infinite; }
+
+    /* Scroll reveal */
+    .rv  { opacity:0; transform:translateY(22px);  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo); }
+    .rvl { opacity:0; transform:translateX(-22px); transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo); }
+    .rvr { opacity:0; transform:translateX(22px);  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo); }
+    .rv.vis, .rvl.vis, .rvr.vis { opacity:1; transform:translate(0); }
+    .d1 { transition-delay:0.05s; } .d2 { transition-delay:0.12s; } .d3 { transition-delay:0.19s; }
+    .d4 { transition-delay:0.26s; } .d5 { transition-delay:0.33s; } .d6 { transition-delay:0.40s; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .hero-visual-wrap { display: none !important; }
+      .two-col { grid-template-columns: 1fr !important; }
+      .four-col { grid-template-columns: 1fr 1fr !important; }
+      .term-col { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ NAV ════════════════════ -->
+<header class="nav-g" style="position:sticky; top:0; z-index:50;">
+  <nav style="max-width:1200px; margin:0 auto; padding:0 1.5rem; height:64px; display:flex; align-items:center; justify-content:space-between;">
+    <a href="#" style="display:flex; align-items:center; text-decoration:none; flex-shrink:0;">
+      <img src="brand assets/LOGO_03透明.png" alt="Therlect" style="height:34px; width:auto; filter:brightness(1.08);" />
+    </a>
+    <div style="display:flex; align-items:center; gap:2rem;">
+      <a href="#solutions" class="nl">Products</a>
+      <a href="#platform" class="nl">Solutions</a>
+      <a href="#trust" class="nl">About</a>
+      <a href="#contact" class="nl">Pricing</a>
+    </div>
+    <a href="#contact" class="bp" style="font-size:0.82rem; padding:0.48rem 1.1rem;">Get started</a>
+  </nav>
+</header>
+
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section id="hero-section" style="position:relative; overflow:hidden; padding:7rem 1.5rem 5.5rem;">
+
+  <!-- WebGL smoke canvas — low opacity + CSS blur for a professional, soft look -->
+  <canvas id="hero-smoke"
+    style="position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0;
+           opacity:0.72; pointer-events:none; filter:saturate(1.3);">
+  </canvas>
+
+  <!-- Gradient overlays: dark base + edge vignette for text legibility -->
+  <div style="position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      linear-gradient(to bottom, rgba(1,3,20,0.2) 0%, transparent 50%, rgba(1,3,20,0.25) 100%),
+      radial-gradient(ellipse 75% 70% at 50% 50%, transparent 35%, rgba(1,3,20,0.38) 100%);"></div>
+
+  <div class="hero-grid" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; position:relative; z-index:2;">
+
+    <!-- LEFT — frosted glass card so text remains sharp over the animation -->
+    <div style="
+      background: rgba(1,3,20,0.35);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-md);
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+    ">
+      <div class="a1" style="margin-bottom:1.5rem;">
+        <span class="lp">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Trusted by world-class engineering teams
+        </span>
+      </div>
+
+      <h1 class="f-dis a2" style="font-size:clamp(2.6rem,4.8vw,3.8rem); font-weight:800; line-height:1.09; letter-spacing:-0.03em; color:var(--txt-h); margin-bottom:1.4rem;">
+        Flexible Thermal<br/><span class="tg">Management Security</span>
+      </h1>
+
+      <p class="a3" style="font-size:1.05rem; line-height:1.78; color:var(--txt-m); max-width:460px; margin-bottom:2.4rem;">
+        A first-class thermal engineering stack built for semiconductors, aerospace, EV powertrains, and AI hardware. From chip to system — we keep your technology at peak performance.
+      </p>
+
+      <div class="a4" style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <a href="#solutions" class="bp">
+          Get started free
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#platform" class="bg">View documentation</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Hero visual card -->
+    <div class="hero-visual-wrap a5" style="display:flex; justify-content:center; align-items:center; position:relative;">
+
+      <!-- Glow behind -->
+      <div class="orb br" style="position:absolute; width:380px; height:380px; background:radial-gradient(circle, rgba(102,51,238,0.28) 0%, transparent 68%); filter:blur(2px);"></div>
+
+      <!-- Thermal card -->
+      <div class="chip fl" style="width:310px; position:relative; z-index:2;">
+        <div style="position:relative; z-index:1;">
+          <div style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(167,143,255,0.65); margin-bottom:0.5rem;">Thermal Status</div>
+          <div class="f-dis" style="font-size:1.75rem; font-weight:800; color:#fff; margin-bottom:4px;">42.3°C</div>
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:1.2rem;">
+            <div style="width:6px; height:6px; border-radius:50%; background:#4ade80;"></div>
+            <span style="font-size:0.73rem; color:#4ade80; font-weight:500;">Within safe operating range</span>
+          </div>
+
+          <!-- Thermal gradient bar with marker -->
+          <div style="position:relative; margin-bottom:1.2rem;">
+            <div style="height:6px; border-radius:999px; background:linear-gradient(90deg,#1d4ed8,#7c3aed 40%,#db2777 65%,#f97316 80%,#ef4444); overflow:visible;"></div>
+            <div style="position:absolute; left:32%; top:50%; transform:translate(-50%,-50%); width:2px; height:16px; background:#fff; border-radius:1px; opacity:0.85;"></div>
+          </div>
+
+          <!-- Metric grid -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; margin-bottom:1.2rem;">
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:0.7rem 0.85rem;">
+              <div style="font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--txt-s); margin-bottom:3px;">Junction Temp</div>
+              <div class="f-dis" style="font-size:1.05rem; font-weight:700; color:#fff;">85°C</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:0.7rem 0.85rem;">
+              <div style="font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--txt-s); margin-bottom:3px;">Thermal Res.</div>
+              <div class="f-dis" style="font-size:1.05rem; font-weight:700; color:#fff;">0.4 K/W</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:0.7rem 0.85rem;">
+              <div style="font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--txt-s); margin-bottom:3px;">Heat Flux</div>
+              <div class="f-dis" style="font-size:1.05rem; font-weight:700; color:#a78fff;">120 W/cm²</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:0.7rem 0.85rem;">
+              <div style="font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--txt-s); margin-bottom:3px;">Efficiency</div>
+              <div class="f-dis" style="font-size:1.05rem; font-weight:700; color:#4ade80;">98.2%</div>
+            </div>
+          </div>
+
+          <a href="#contact" class="bp" style="width:100%; justify-content:center; font-size:0.82rem;">
+            Run thermal analysis
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Floating badge -->
+      <div class="fl2" style="position:absolute; bottom:-18px; right:10px; background:var(--bg-elevated); border:1px solid rgba(102,51,238,0.3); border-radius:10px; padding:0.65rem 0.9rem; z-index:3;">
+        <div style="font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--txt-s); margin-bottom:3px;">CFD Simulation</div>
+        <div class="f-dis" style="font-size:0.88rem; font-weight:700; color:#fff;">✓ Validated</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════ LOGO STRIP ════════════════════ -->
+<div style="border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05); padding:1.4rem 1.5rem; background:rgba(255,255,255,0.012);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <p style="text-align:center; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--txt-s); margin-bottom:1.1rem;">Trusted by engineering teams at</p>
+    <div style="display:flex; align-items:center; justify-content:center; gap:2.5rem 3.5rem; flex-wrap:wrap;">
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">NVIDIA</span>
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">SpaceX</span>
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">Rivian</span>
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">AMD</span>
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">Northrop Grumman</span>
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">Qualcomm</span>
+      <span style="color:var(--txt-s); font-size:0.9rem; font-weight:700; letter-spacing:-0.01em; opacity:0.5;">Lockheed Martin</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════ ACCELERATE / FEATURES SECTION ════════════════════ -->
+<section id="solutions" style="padding:6.5rem 1.5rem; background:linear-gradient(180deg, rgba(28,10,80,0.28) 0%, transparent 100%);">
+  <div class="two-col" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start;">
+
+    <!-- Left -->
+    <div class="rvl">
+      <span class="lp" style="margin-bottom:1.3rem; display:inline-flex;">Our Platform</span>
+      <h2 class="f-dis" style="font-size:clamp(1.9rem,3.2vw,2.65rem); font-weight:800; line-height:1.14; letter-spacing:-0.03em; color:var(--txt-h); margin:0.9rem 0 1.2rem;">
+        Accelerate your engineering with a first-class thermal stack
+      </h2>
+      <p style="font-size:0.93rem; line-height:1.8; color:var(--txt-m); max-width:400px; margin-bottom:2.5rem;">
+        Purpose-built for hardware teams that need accurate thermal data, fast simulation, and validated results — without compromising on precision or repeatability.
+      </p>
+
+      <div>
+        <div class="fr" style="border-bottom:1px solid var(--border);">
+          <div class="fi">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          </div>
+          <div style="padding-bottom:0.9rem;">
+            <div style="font-size:0.88rem; font-weight:600; color:var(--txt-h); margin-bottom:0.3rem;">CFD Thermal Simulation</div>
+            <div style="font-size:0.83rem; color:var(--txt-m); line-height:1.68;">Accurate computational fluid dynamics models that predict thermal behavior before hardware is built.</div>
+          </div>
+        </div>
+        <div class="fr" style="border-bottom:1px solid var(--border);">
+          <div class="fi">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div style="padding-bottom:0.9rem;">
+            <div style="font-size:0.88rem; font-weight:600; color:var(--txt-h); margin-bottom:0.3rem;">Real-Time Monitoring</div>
+            <div style="font-size:0.83rem; color:var(--txt-m); line-height:1.68;">Live thermal telemetry and dashboards for continuous system health monitoring across your full stack.</div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fi">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.88rem; font-weight:600; color:var(--txt-h); margin-bottom:0.3rem;">Material Optimization</div>
+            <div style="font-size:0.83rem; color:var(--txt-m); line-height:1.68;">AI-assisted selection for thermal interface compounds, heat spreaders, and advanced composites.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Dashboard -->
+    <div class="rvr">
+      <div class="cg" style="padding:1.5rem; position:relative; overflow:hidden;">
+        <div class="orb" style="position:absolute; width:220px; height:220px; top:-60px; right:-60px; background:radial-gradient(circle, rgba(102,51,238,0.18) 0%, transparent 70%); filter:blur(35px);"></div>
+
+        <div style="font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--txt-s); margin-bottom:1.25rem;">Thermal Performance Dashboard</div>
+
+        <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.4rem;">
+          <div class="mr">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:7px; height:7px; border-radius:50%; background:#4ade80;"></div>
+              <span style="font-size:0.85rem; color:var(--txt-b);">GPU Cluster A</span>
+            </div>
+            <div style="text-align:right;">
+              <div class="f-dis" style="font-size:0.9rem; font-weight:700; color:#fff;">38.2°C</div>
+              <div style="font-size:0.68rem; color:var(--txt-s);">nominal</div>
+            </div>
+          </div>
+          <div class="mr">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:7px; height:7px; border-radius:50%; background:#facc15;"></div>
+              <span style="font-size:0.85rem; color:var(--txt-b);">Power Module B</span>
+            </div>
+            <div style="text-align:right;">
+              <div class="f-dis" style="font-size:0.9rem; font-weight:700; color:#fff;">72.1°C</div>
+              <div style="font-size:0.68rem; color:#facc15;">elevated</div>
+            </div>
+          </div>
+          <div class="mr">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:7px; height:7px; border-radius:50%; background:#4ade80;"></div>
+              <span style="font-size:0.85rem; color:var(--txt-b);">Battery Pack C</span>
+            </div>
+            <div style="text-align:right;">
+              <div class="f-dis" style="font-size:0.9rem; font-weight:700; color:#fff;">29.5°C</div>
+              <div style="font-size:0.68rem; color:var(--txt-s);">nominal</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:8px; overflow:hidden; padding:1rem; background:rgba(255,255,255,0.022); border:1px solid var(--border); position:relative; z-index:1;">
+          <div style="font-size:0.68rem; color:var(--txt-s); margin-bottom:0.7rem; letter-spacing:0.05em; text-transform:uppercase;">System Thermal Map</div>
+          <div style="height:7px; border-radius:999px; background:linear-gradient(90deg,#1e40af,#7c3aed 35%,#db2777 60%,#f97316 80%,#ef4444); margin-bottom:0.5rem;"></div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-size:0.62rem; color:var(--txt-s);">−40°C</span>
+            <span style="font-size:0.62rem; color:var(--txt-s);">0°C</span>
+            <span style="font-size:0.62rem; color:var(--txt-s);">85°C</span>
+            <span style="font-size:0.62rem; color:var(--txt-s);">150°C</span>
+            <span style="font-size:0.62rem; color:var(--txt-s);">300°C</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr" style="max-width:1200px; margin:0 auto;"></div>
+
+
+<!-- ════════════════════ TOKENIZATION / DATA SECTION ════════════════════ -->
+<section style="padding:7.5rem 1.5rem; text-align:center; position:relative; overflow:hidden;">
+  <div class="orb" style="position:absolute; width:600px; height:320px; top:50%; left:50%; transform:translate(-50%,-50%); background:radial-gradient(ellipse, rgba(102,51,238,0.14) 0%, transparent 68%); filter:blur(2px);"></div>
+
+  <div style="max-width:780px; margin:0 auto; position:relative; z-index:1;" class="rv">
+    <span class="lp" style="margin-bottom:1.25rem; display:inline-flex;">Data Integrity</span>
+    <h2 class="f-dis" style="font-size:clamp(2rem,4vw,3.1rem); font-weight:800; line-height:1.13; letter-spacing:-0.03em; color:var(--txt-h); margin:0.9rem 0 1.4rem;">
+      Thermal data, but with a <span class="tg">powerful and flexible</span><br/>ownership model
+    </h2>
+    <p style="font-size:1rem; line-height:1.8; color:var(--txt-m); max-width:540px; margin:0 auto 2.5rem;">
+      Your thermal data never leaves your infrastructure. Encrypted, validated, and version-controlled — we engineer the solution, you retain full data sovereignty and IP ownership.
+    </p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="#solutions" class="bp">Explore the model</a>
+      <a href="#platform" class="bg">Read the docs</a>
+    </div>
+  </div>
+</section>
+
+<div class="hr" style="max-width:1200px; margin:0 auto;"></div>
+
+
+<!-- ════════════════════ WE ENGINEER IT, YOU OWN IT ════════════════════ -->
+<section style="padding:6.5rem 1.5rem;">
+  <div class="two-col" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;">
+
+    <!-- Left -->
+    <div class="rvl">
+      <span class="lp" style="margin-bottom:1.2rem; display:inline-flex;">Control & Ownership</span>
+      <h2 class="f-dis" style="font-size:clamp(1.9rem,3.2vw,2.65rem); font-weight:800; line-height:1.14; letter-spacing:-0.03em; color:var(--txt-h); margin:0.9rem 0 1.2rem;">
+        We engineer it.<br/>You own it.
+      </h2>
+      <p style="font-size:0.93rem; line-height:1.8; color:var(--txt-m); max-width:400px; margin-bottom:1.8rem;">
+        Full IP transfer on all custom thermal designs. Your simulation data, models, and validated results — delivered in open formats you control forever.
+      </p>
+
+      <div>
+        <div class="ci">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(102,51,238,0.14); border:1px solid rgba(102,51,238,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.875rem; font-weight:600; color:var(--txt-h); margin-bottom:0.2rem;">Full IP transfer on all designs</div>
+            <div style="font-size:0.82rem; color:var(--txt-m); line-height:1.65;">CAD files, simulation models, and validation reports delivered in open formats.</div>
+          </div>
+        </div>
+        <div class="ci">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(102,51,238,0.14); border:1px solid rgba(102,51,238,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.875rem; font-weight:600; color:var(--txt-h); margin-bottom:0.2rem;">Encrypted data pipeline</div>
+            <div style="font-size:0.82rem; color:var(--txt-m); line-height:1.65;">All thermal data transmitted and stored with end-to-end encryption. No third-party access.</div>
+          </div>
+        </div>
+        <div class="ci">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(102,51,238,0.14); border:1px solid rgba(102,51,238,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.875rem; font-weight:600; color:var(--txt-h); margin-bottom:0.2rem;">Version-controlled simulation history</div>
+            <div style="font-size:0.82rem; color:var(--txt-m); line-height:1.65;">Every iteration tracked and retrievable — full audit trail for regulatory compliance.</div>
+          </div>
+        </div>
+        <div class="ci">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(102,51,238,0.14); border:1px solid rgba(102,51,238,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.875rem; font-weight:600; color:var(--txt-h); margin-bottom:0.2rem;">On-prem deployment option</div>
+            <div style="font-size:0.82rem; color:var(--txt-m); line-height:1.65;">Deploy our monitoring stack within your own infrastructure for air-gapped environments.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Config panel -->
+    <div class="rvr">
+      <div class="cg" style="padding:1.75rem; position:relative; overflow:hidden;">
+        <div class="orb" style="position:absolute; width:200px; height:200px; bottom:-50px; right:-50px; background:radial-gradient(circle, rgba(102,51,238,0.18) 0%, transparent 70%); filter:blur(35px);"></div>
+
+        <div style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--txt-s); margin-bottom:1.5rem;">Project Configuration</div>
+
+        <div style="display:flex; flex-direction:column; gap:0.95rem; margin-bottom:1.5rem; position:relative; z-index:1;">
+          <div>
+            <label style="font-size:0.76rem; color:var(--txt-m); display:block; margin-bottom:0.38rem;">Project name</label>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09); border-radius:8px; padding:0.62rem 0.9rem; font-size:0.875rem; color:var(--txt-b);">GPU Cooling Stack v2</div>
+          </div>
+          <div>
+            <label style="font-size:0.76rem; color:var(--txt-m); display:block; margin-bottom:0.38rem;">Target junction temperature</label>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(102,51,238,0.45); border-radius:8px; padding:0.62rem 0.9rem; font-size:0.875rem; color:var(--txt-b); display:flex; justify-content:space-between; align-items:center;">
+              <span>85°C max</span>
+              <span style="color:#a78fff; font-size:0.8rem;">↑ active</span>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:0.76rem; color:var(--txt-m); display:block; margin-bottom:0.38rem;">Thermal interface material</label>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09); border-radius:8px; padding:0.62rem 0.9rem; font-size:0.875rem; color:var(--txt-b); display:flex; justify-content:space-between;">
+              <span>Graphene composite</span>
+              <span style="color:var(--txt-s);">▾</span>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:0.76rem; color:var(--txt-m); display:block; margin-bottom:0.38rem;">Simulation fidelity</label>
+            <div style="display:flex; gap:0.5rem;">
+              <div style="flex:1; text-align:center; padding:0.48rem; border-radius:6px; background:rgba(102,51,238,0.18); border:1px solid rgba(102,51,238,0.5); font-size:0.76rem; font-weight:600; color:#a78fff;">Standard</div>
+              <div style="flex:1; text-align:center; padding:0.48rem; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid var(--border); font-size:0.76rem; color:var(--txt-m);">High</div>
+              <div style="flex:1; text-align:center; padding:0.48rem; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid var(--border); font-size:0.76rem; color:var(--txt-m);">Ultra</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#contact" class="bp" style="width:100%; justify-content:center;">Run simulation →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr" style="max-width:1200px; margin:0 auto;"></div>
+
+
+<!-- ════════════════════ DEVELOPER PLATFORM ════════════════════ -->
+<section id="platform" style="padding:6.5rem 1.5rem; background:linear-gradient(180deg, rgba(18,6,55,0.35) 0%, transparent 100%);">
+  <div class="term-col" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1.15fr; gap:5rem; align-items:center;">
+
+    <!-- Left -->
+    <div class="rvl">
+      <span class="lp" style="margin-bottom:1.2rem; display:inline-flex;">Developer Platform</span>
+      <h2 class="f-dis" style="font-size:clamp(1.9rem,3.2vw,2.65rem); font-weight:800; line-height:1.14; letter-spacing:-0.03em; color:var(--txt-h); margin:0.9rem 0 1.2rem;">
+        Powered by an easy-to-use, engineer-friendly platform
+      </h2>
+      <p style="font-size:0.93rem; line-height:1.8; color:var(--txt-m); max-width:390px; margin-bottom:2rem;">
+        Integrate thermal simulation and monitoring directly into your hardware development pipeline via our API or desktop toolkit.
+      </p>
+
+      <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.7rem; margin-bottom:2rem;">
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.875rem; color:var(--txt-m);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          REST API with SDKs for Python, MATLAB, and C++
+        </li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.875rem; color:var(--txt-m);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          ANSYS, COMSOL, and OpenFOAM integrations
+        </li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.875rem; color:var(--txt-m);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Webhook support for real-time thermal alert delivery
+        </li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.875rem; color:var(--txt-m);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Detailed documentation with annotated examples
+        </li>
+      </ul>
+
+      <a href="#" class="bp">View API docs →</a>
+    </div>
+
+    <!-- Right: Terminal -->
+    <div class="rvr">
+      <div class="term">
+        <div class="term-bar">
+          <div class="td" style="background:#ff5f57;"></div>
+          <div class="td" style="background:#febc2e;"></div>
+          <div class="td" style="background:#28c840;"></div>
+          <span style="font-size:0.68rem; color:var(--txt-s); margin-left:8px;">therlect_api.py</span>
+        </div>
+        <div class="tc">
+<span class="tco"># Therlect Thermal API — Python SDK</span>
+<span class="tp">import</span> therlect
+
+<span class="tco"># Initialize client</span>
+client = therlect.<span class="tb">Client</span>(
+  api_key=<span class="tg2">"thr_live_xxxxxxxxxxxx"</span>
+)
+
+<span class="tco"># Run thermal simulation</span>
+result = client.simulate.<span class="tb">run</span>(
+  model=<span class="tg2">"gpu_heatsink_v2"</span>,
+  power_dissipation=<span class="to">250</span>,   <span class="tco"># watts</span>
+  ambient_temp=<span class="to">25</span>,         <span class="tco"># °C</span>
+  fidelity=<span class="tg2">"high"</span>
+)
+
+<span class="tp">print</span>(result.junction_temp)  <span class="tco"># 82.4°C ✓</span>
+<span class="tp">print</span>(result.hotspot)        <span class="tco"># (x:14.2, y:8.7)</span>
+<span class="tp">print</span>(result.efficiency)     <span class="tco"># 0.978</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr" style="max-width:1200px; margin:0 auto;"></div>
+
+
+<!-- ════════════════════ WHY TRUST US ════════════════════ -->
+<section id="trust" style="padding:6.5rem 1.5rem;">
+  <div style="max-width:1200px; margin:0 auto;">
+
+    <div style="text-align:center; margin-bottom:3.5rem;" class="rv">
+      <h2 class="f-dis" style="font-size:clamp(2rem,3.5vw,2.8rem); font-weight:800; letter-spacing:-0.03em; color:var(--txt-h); margin-bottom:0.5rem;">Why Trust Us?</h2>
+      <p style="font-size:0.93rem; color:var(--txt-m);">Built on 15 years of validated thermal engineering outcomes.</p>
+    </div>
+
+    <div class="four-col" style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem;">
+
+      <div class="tc2 rv d1">
+        <div style="width:44px; height:44px; border-radius:10px; background:rgba(102,51,238,0.1); border:1px solid rgba(102,51,238,0.22); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="f-dis" style="font-size:0.93rem; font-weight:700; color:var(--txt-h); margin-bottom:0.45rem;">MIL-STD Certified</h3>
+        <p style="font-size:0.81rem; color:var(--txt-m); line-height:1.65;">All solutions validated to MIL-STD-810 and MIL-STD-461 for defense-grade reliability.</p>
+      </div>
+
+      <div class="tc2 rv d2">
+        <div style="width:44px; height:44px; border-radius:10px; background:rgba(102,51,238,0.1); border:1px solid rgba(102,51,238,0.22); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3 class="f-dis" style="font-size:0.93rem; font-weight:700; color:var(--txt-h); margin-bottom:0.45rem;">15+ Years Experience</h3>
+        <p style="font-size:0.81rem; color:var(--txt-m); line-height:1.65;">Deep domain expertise across aerospace, automotive, semiconductor, and medical thermal challenges.</p>
+      </div>
+
+      <div class="tc2 rv d3">
+        <div style="width:44px; height:44px; border-radius:10px; background:rgba(102,51,238,0.1); border:1px solid rgba(102,51,238,0.22); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3 class="f-dis" style="font-size:0.93rem; font-weight:700; color:var(--txt-h); margin-bottom:0.45rem;">±0.01°C Precision</h3>
+        <p style="font-size:0.81rem; color:var(--txt-m); line-height:1.65;">Industry-leading measurement accuracy validated through NIST-traceable calibration processes.</p>
+      </div>
+
+      <div class="tc2 rv d4">
+        <div style="width:44px; height:44px; border-radius:10px; background:rgba(102,51,238,0.1); border:1px solid rgba(102,51,238,0.22); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <h3 class="f-dis" style="font-size:0.93rem; font-weight:700; color:var(--txt-h); margin-bottom:0.45rem;">AEC-Q Automotive</h3>
+        <p style="font-size:0.81rem; color:var(--txt-m); line-height:1.65;">Full AEC-Q100/Q101 qualified thermal solutions for automotive powertrain and EV battery systems.</p>
+      </div>
+
+      <div class="tc2 rv d5">
+        <div style="width:44px; height:44px; border-radius:10px; background:rgba(102,51,238,0.1); border:1px solid rgba(102,51,238,0.22); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 class="f-dis" style="font-size:0.93rem; font-weight:700; color:var(--txt-h); margin-bottom:0.45rem;">Expert Engineering Team</h3>
+        <p style="font-size:0.81rem; color:var(--txt-m); line-height:1.65;">PhDs and senior engineers with hands-on experience from NASA, TSMC, and leading OEM programs.</p>
+      </div>
+
+      <div class="tc2 rv d6">
+        <div style="width:44px; height:44px; border-radius:10px; background:rgba(102,51,238,0.1); border:1px solid rgba(102,51,238,0.22); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="f-dis" style="font-size:0.93rem; font-weight:700; color:var(--txt-h); margin-bottom:0.45rem;">40% Avg. Heat Reduction</h3>
+        <p style="font-size:0.81rem; color:var(--txt-m); line-height:1.65;">Proven outcomes across 200+ projects — 40% average thermal reduction against baseline designs.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="hr" style="max-width:1200px; margin:0 auto;"></div>
+
+
+<!-- ════════════════════ CTA ════════════════════ -->
+<section id="contact" style="padding:7.5rem 1.5rem; text-align:center; position:relative; overflow:hidden;">
+  <div class="orb" style="position:absolute; width:650px; height:350px; top:50%; left:50%; transform:translate(-50%,-50%); background:radial-gradient(ellipse, rgba(102,51,238,0.17) 0%, transparent 68%); filter:blur(2px);"></div>
+
+  <div style="max-width:660px; margin:0 auto; position:relative; z-index:1;" class="rv">
+    <h2 class="f-dis" style="font-size:clamp(2.2rem,4.5vw,3.5rem); font-weight:800; line-height:1.08; letter-spacing:-0.035em; color:var(--txt-h); margin-bottom:1.2rem;">
+      Start solving your<br/>thermal challenges today
+    </h2>
+    <p style="font-size:1rem; line-height:1.8; color:var(--txt-m); max-width:460px; margin:0 auto 2.5rem;">
+      Whether you're cooling a next-gen AI accelerator or protecting a spacecraft, Therlect has the expertise to get you there — on time and on spec.
+    </p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="mailto:contact@therlect.com" class="bp" style="font-size:0.95rem; padding:0.72rem 2rem;">
+        Talk to an engineer
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#solutions" class="bg" style="font-size:0.95rem; padding:0.72rem 2rem;">View solutions</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer style="border-top:1px solid rgba(255,255,255,0.055); padding:3.5rem 1.5rem 2rem; background:rgba(0,0,8,0.55);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; margin-bottom:2.5rem;">
+
+      <div>
+        <img src="brand assets/LOGO_03透明.png" alt="Therlect" style="height:30px; width:auto; filter:brightness(1.05); margin-bottom:0.9rem;" />
+        <p style="font-size:0.83rem; line-height:1.75; color:var(--txt-s); max-width:240px;">
+          Precision thermal engineering for the technologies that define tomorrow.
+        </p>
+      </div>
+
+      <div>
+        <h5 style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--txt-h); margin-bottom:1.1rem;">Products</h5>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.7rem;">
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Simulation Platform</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Monitoring API</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Material Database</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Design Services</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--txt-h); margin-bottom:1.1rem;">Solutions</h5>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.7rem;">
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Semiconductor</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Aerospace</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Electric Vehicles</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Data Centers</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--txt-h); margin-bottom:1.1rem;">Company</h5>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.7rem;">
+          <li><a href="#" class="nl" style="font-size:0.85rem;">About</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Engineering Team</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Case Studies</a></li>
+          <li><a href="#" class="nl" style="font-size:0.85rem;">Careers</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="hr" style="margin-bottom:1.5rem;"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+      <span style="font-size:0.76rem; color:var(--txt-s);">© 2026 Therlect. All rights reserved.</span>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#" class="nl" style="font-size:0.76rem; color:var(--txt-s);">Privacy</a>
+        <a href="#" class="nl" style="font-size:0.76rem; color:var(--txt-s);">Terms</a>
+        <a href="#" class="nl" style="font-size:0.76rem; color:var(--txt-s);">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // ─────────────────────────────────────────────────────────────────────────
+  // SMOKE BACKGROUND  — vanilla-JS port of spooky-smoke-animation.tsx
+  // Exact shader logic preserved; React/TypeScript dependencies removed.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const _FRAG = `#version 300 es
+precision highp float;
+out vec4 O;
+uniform float time;
+uniform vec2 resolution;
+uniform vec3 u_color;
+
+#define FC gl_FragCoord.xy
+#define R resolution
+#define T (time+660.)
+
+float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(rnd(i),rnd(i+vec2(1,0)),u.x),mix(rnd(i+vec2(0,1)),rnd(i+1.),u.x),u.y);}
+float fbm(vec2 p){float t=.0,a=1.;for(int i=0;i<5;i++){t+=a*noise(p);p*=mat2(1,-1.2,.2,1.2)*2.;a*=.5;}return t;}
+
+void main(){
+  vec2 uv=(FC-.5*R)/R.y;
+  vec3 col=vec3(1);
+  uv.x+=.25;
+  uv*=vec2(2,1);
+
+  float n=fbm(uv*.28-vec2(T*.01,0));
+  n=noise(uv*3.+n*2.);
+
+  col.r-=fbm(uv+vec2(0,T*.015)+n);
+  col.g-=fbm(uv*1.003+vec2(0,T*.015)+n+.003);
+  col.b-=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
+
+  col=mix(col, u_color, dot(col,vec3(.21,.71,.07)));
+
+  col=mix(vec3(.08),col,min(time*.1,1.));
+  col=clamp(col,.08,1.);
+  O=vec4(col,1);
+}`;
+
+  const _VERT = `#version 300 es
+precision highp float;
+in vec4 position;
+void main(){ gl_Position = position; }`;
+
+  // Hex → normalised [r,g,b] float array  (e.g. "#6633ee" → [0.4,0.2,0.93])
+  function hexToRgbFloat(hex) {
+    const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return r ? [parseInt(r[1],16)/255, parseInt(r[2],16)/255, parseInt(r[3],16)/255] : null;
+  }
+
+  class SmokeRenderer {
+    constructor(canvas, color) {
+      this.canvas   = canvas;
+      this.color    = color || [0.4, 0.2, 0.933]; // default: Therlect primary #6633ee
+      this.gl       = canvas.getContext('webgl2');
+      this.program  = null;
+      this.uniforms = {};
+      this.buffer   = null;
+      this._vs      = null;
+      this._fs      = null;
+
+      if (!this.gl) { console.warn('SmokeBackground: WebGL2 not available.'); return; }
+      this._setup();
+      this._init();
+    }
+
+    _compile(shader, src) {
+      const gl = this.gl;
+      gl.shaderSource(shader, src);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+        console.error('Smoke shader error:', gl.getShaderInfoLog(shader));
+    }
+
+    _setup() {
+      const gl = this.gl;
+      this._vs  = gl.createShader(gl.VERTEX_SHADER);
+      this._fs  = gl.createShader(gl.FRAGMENT_SHADER);
+      this.program = gl.createProgram();
+      this._compile(this._vs, _VERT);
+      this._compile(this._fs, _FRAG);
+      gl.attachShader(this.program, this._vs);
+      gl.attachShader(this.program, this._fs);
+      gl.linkProgram(this.program);
+      if (!gl.getProgramParameter(this.program, gl.LINK_STATUS))
+        console.error('Smoke program link error:', gl.getProgramInfoLog(this.program));
+    }
+
+    _init() {
+      const { gl, program } = this;
+      if (!program) return;
+      this.buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
+      const pos = gl.getAttribLocation(program, 'position');
+      gl.enableVertexAttribArray(pos);
+      gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+      this.uniforms = {
+        resolution : gl.getUniformLocation(program, 'resolution'),
+        time       : gl.getUniformLocation(program, 'time'),
+        u_color    : gl.getUniformLocation(program, 'u_color'),
+      };
+    }
+
+    updateScale() {
+      // Cap at 2× to prevent over-sampling that causes a fuzzy appearance
+      const dpr    = Math.min(Math.max(1, window.devicePixelRatio || 1), 2);
+      const rect   = this.canvas.parentElement.getBoundingClientRect();
+      const w      = Math.round(rect.width  * dpr);
+      const h      = Math.round(rect.height * dpr);
+      this.canvas.width  = w;
+      this.canvas.height = h;
+      this.gl.viewport(0, 0, w, h);
+    }
+
+    updateColor(newColor) { this.color = newColor; }
+
+    render(now) {
+      const { gl, program, buffer, canvas, uniforms, color } = this;
+      if (!program || !gl.isProgram(program)) return;
+      gl.clearColor(0, 0, 0, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.useProgram(program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+      gl.uniform1f(uniforms.time, now * 1e-3);
+      gl.uniform3fv(uniforms.u_color, color);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
+    destroy() {
+      const { gl, program, _vs, _fs } = this;
+      if (_vs) { gl.detachShader(program, _vs); gl.deleteShader(_vs); }
+      if (_fs) { gl.detachShader(program, _fs); gl.deleteShader(_fs); }
+      if (program) gl.deleteProgram(program);
+    }
+  }
+
+  // ── Bootstrap ─────────────────────────────────────────────────────────────
+  (function initSmokeBackground() {
+    const canvas = document.getElementById('hero-smoke');
+    if (!canvas) return;
+
+    // Deeper, desaturated indigo — professional and non-distracting
+    const smokeColor = '#5c2be2';
+    const rgbColor   = hexToRgbFloat(smokeColor) || [0.18, 0.063, 0.396];
+
+    const renderer = new SmokeRenderer(canvas, rgbColor);
+    if (!renderer.gl) return; // WebGL2 unavailable — degrade gracefully
+
+    const onResize = () => renderer.updateScale();
+    onResize(); // set initial canvas resolution
+    window.addEventListener('resize', onResize);
+
+    let rafId;
+    const loop = (now) => {
+      renderer.render(now);
+      rafId = requestAnimationFrame(loop);
+    };
+    rafId = requestAnimationFrame(loop);
+
+    // Clean up if the page is ever unloaded
+    window.addEventListener('pagehide', () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', onResize);
+      renderer.destroy();
+    }, { once: true });
+  })();
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Intersection observer — fires scroll-reveal animations
+  // ─────────────────────────────────────────────────────────────────────────
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.rv, .rvl, .rvr').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

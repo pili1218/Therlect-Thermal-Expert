@@ -1,0 +1,20 @@
+# Reference/working files — not part of the deployed site
+evervault.com__ref=godly.png
+*.tmp
+.tmp/
+
+# Claude internal instructions
+CLAUDE.md
+CLAUDE (2).md
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+
+# Python server (dev only)
+__pycache__/
+*.pyc
