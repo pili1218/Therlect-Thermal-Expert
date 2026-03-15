@@ -312,8 +312,170 @@
     <a href="#" style="display:flex; align-items:center; text-decoration:none; flex-shrink:0;">
       <img src="brand assets/LOGO_03透明.png" alt="Therlect" style="height:34px; width:auto; filter:brightness(1.08);" />
     </a>
-    <div style="display:flex; align-items:center; gap:2rem;">
-      <a href="#solutions" class="nl">Products</a>
+    <div style="display:flex; align-items:center; gap:2rem; position:relative;">
+
+      <!-- Products dropdown trigger -->
+      <button id="products-btn" onclick="toggleProductsMenu(event)"
+        style="display:flex; align-items:center; gap:5px; background:none; border:none; cursor:pointer;
+               color:var(--text-subtle); font-size:0.875rem; font-weight:500; font-family:var(--font-family-base);
+               transition:color 0.18s ease; padding:0;"
+        onmouseenter="this.style.color='var(--text-headings)'"
+        onmouseleave="this.style.color=document.getElementById('products-menu').classList.contains('open') ? 'var(--text-headings)' : 'var(--text-subtle)'">
+        Products
+        <svg id="products-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+          style="transition:transform 0.25s var(--ease-out-expo); opacity:0.6;">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Mega-menu dropdown -->
+      <div id="products-menu"
+        style="display:none; opacity:0; transform:translateY(8px);
+               position:absolute; top:calc(100% + 18px); left:-24px;
+               width:720px; border-radius:var(--radius-md);
+               background:var(--grey-90); border:1px solid var(--grey-80);
+               box-shadow:0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+               padding:1.5rem; z-index:100;
+               transition:opacity 0.22s var(--ease-out-expo), transform 0.22s var(--ease-out-expo);">
+
+        <!-- Header row -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:1px solid var(--grey-80);">
+          <div>
+            <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--grey-60);">Product Portfolio</div>
+            <div style="font-size:0.82rem; color:var(--text-subtle); margin-top:2px;">Engineering-grade thermal solutions</div>
+          </div>
+          <a href="#solutions" onclick="closeProductsMenu()" class="lp" style="font-size:0.72rem;">
+            View all →
+          </a>
+        </div>
+
+        <!-- Product grid -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.85rem;">
+
+          <!-- Card 1 -->
+          <a href="#solutions" onclick="closeProductsMenu()" class="prod-card"
+            style="text-decoration:none; display:block; border-radius:var(--radius-sm);
+                   background:var(--grey-95); border:1px solid var(--grey-80);
+                   overflow:hidden; transition:border-color 0.2s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease;">
+            <div style="height:110px; overflow:hidden; position:relative;">
+              <img src="https://placehold.co/280x110/0b0d1c/6633ee?text=CFD+Simulation" alt="CFD Simulation"
+                style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s var(--ease-out-expo);" class="prod-img"/>
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(11,13,28,0.8) 0%, transparent 60%);"></div>
+              <span style="position:absolute; bottom:8px; left:10px; font-size:0.62rem; font-weight:700;
+                           text-transform:uppercase; letter-spacing:0.1em; color:var(--primary-light);
+                           background:rgba(102,51,238,0.18); border:1px solid rgba(102,51,238,0.3);
+                           padding:2px 7px; border-radius:999px;">Simulation</span>
+            </div>
+            <div style="padding:0.85rem;">
+              <div style="font-size:0.85rem; font-weight:600; color:var(--text-headings); margin-bottom:0.3rem; font-family:var(--font-family-headings);">CFD Thermal Platform</div>
+              <div style="font-size:0.76rem; color:var(--text-subtle); line-height:1.6;">Computational fluid dynamics models for chip, board, and system-level analysis.</div>
+            </div>
+          </a>
+
+          <!-- Card 2 -->
+          <a href="#platform" onclick="closeProductsMenu()" class="prod-card"
+            style="text-decoration:none; display:block; border-radius:var(--radius-sm);
+                   background:var(--grey-95); border:1px solid var(--grey-80);
+                   overflow:hidden; transition:border-color 0.2s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease;">
+            <div style="height:110px; overflow:hidden; position:relative;">
+              <img src="https://placehold.co/280x110/0b0d1c/2563eb?text=Monitoring+API" alt="Monitoring API"
+                style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s var(--ease-out-expo);" class="prod-img"/>
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(11,13,28,0.8) 0%, transparent 60%);"></div>
+              <span style="position:absolute; bottom:8px; left:10px; font-size:0.62rem; font-weight:700;
+                           text-transform:uppercase; letter-spacing:0.1em; color:#60a5fa;
+                           background:rgba(37,99,235,0.18); border:1px solid rgba(37,99,235,0.3);
+                           padding:2px 7px; border-radius:999px;">API</span>
+            </div>
+            <div style="padding:0.85rem;">
+              <div style="font-size:0.85rem; font-weight:600; color:var(--text-headings); margin-bottom:0.3rem; font-family:var(--font-family-headings);">Real-Time Monitoring</div>
+              <div style="font-size:0.76rem; color:var(--text-subtle); line-height:1.6;">Live telemetry dashboards and alert webhooks for continuous thermal health tracking.</div>
+            </div>
+          </a>
+
+          <!-- Card 3 -->
+          <a href="#solutions" onclick="closeProductsMenu()" class="prod-card"
+            style="text-decoration:none; display:block; border-radius:var(--radius-sm);
+                   background:var(--grey-95); border:1px solid var(--grey-80);
+                   overflow:hidden; transition:border-color 0.2s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease;">
+            <div style="height:110px; overflow:hidden; position:relative;">
+              <img src="https://placehold.co/280x110/0b0d1c/4ade80?text=Material+DB" alt="Material Database"
+                style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s var(--ease-out-expo);" class="prod-img"/>
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(11,13,28,0.8) 0%, transparent 60%);"></div>
+              <span style="position:absolute; bottom:8px; left:10px; font-size:0.62rem; font-weight:700;
+                           text-transform:uppercase; letter-spacing:0.1em; color:#4ade80;
+                           background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.25);
+                           padding:2px 7px; border-radius:999px;">Database</span>
+            </div>
+            <div style="padding:0.85rem;">
+              <div style="font-size:0.85rem; font-weight:600; color:var(--text-headings); margin-bottom:0.3rem; font-family:var(--font-family-headings);">Material Database</div>
+              <div style="font-size:0.76rem; color:var(--text-subtle); line-height:1.6;">Curated library of TIMs, heat spreaders, and composite properties with searchable specs.</div>
+            </div>
+          </a>
+
+          <!-- Card 4 -->
+          <a href="#solutions" onclick="closeProductsMenu()" class="prod-card"
+            style="text-decoration:none; display:block; border-radius:var(--radius-sm);
+                   background:var(--grey-95); border:1px solid var(--grey-80);
+                   overflow:hidden; transition:border-color 0.2s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease;">
+            <div style="height:110px; overflow:hidden; position:relative;">
+              <img src="https://placehold.co/280x110/0b0d1c/a855f7?text=PCB+Cooling" alt="PCB Cooling"
+                style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s var(--ease-out-expo);" class="prod-img"/>
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(11,13,28,0.8) 0%, transparent 60%);"></div>
+              <span style="position:absolute; bottom:8px; left:10px; font-size:0.62rem; font-weight:700;
+                           text-transform:uppercase; letter-spacing:0.1em; color:#c084fc;
+                           background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3);
+                           padding:2px 7px; border-radius:999px;">Hardware</span>
+            </div>
+            <div style="padding:0.85rem;">
+              <div style="font-size:0.85rem; font-weight:600; color:var(--text-headings); margin-bottom:0.3rem; font-family:var(--font-family-headings);">PCB & Chip Cooling</div>
+              <div style="font-size:0.76rem; color:var(--text-subtle); line-height:1.6;">Custom heat sink design, vapor chambers, and thermal interface solutions for dense ICs.</div>
+            </div>
+          </a>
+
+          <!-- Card 5 -->
+          <a href="#solutions" onclick="closeProductsMenu()" class="prod-card"
+            style="text-decoration:none; display:block; border-radius:var(--radius-sm);
+                   background:var(--grey-95); border:1px solid var(--grey-80);
+                   overflow:hidden; transition:border-color 0.2s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease;">
+            <div style="height:110px; overflow:hidden; position:relative;">
+              <img src="https://placehold.co/280x110/0b0d1c/fb923c?text=Aerospace" alt="Aerospace Thermal"
+                style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s var(--ease-out-expo);" class="prod-img"/>
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(11,13,28,0.8) 0%, transparent 60%);"></div>
+              <span style="position:absolute; bottom:8px; left:10px; font-size:0.62rem; font-weight:700;
+                           text-transform:uppercase; letter-spacing:0.1em; color:#fb923c;
+                           background:rgba(251,146,60,0.1); border:1px solid rgba(251,146,60,0.25);
+                           padding:2px 7px; border-radius:999px;">Aerospace</span>
+            </div>
+            <div style="padding:0.85rem;">
+              <div style="font-size:0.85rem; font-weight:600; color:var(--text-headings); margin-bottom:0.3rem; font-family:var(--font-family-headings);">Aerospace Systems</div>
+              <div style="font-size:0.76rem; color:var(--text-subtle); line-height:1.6;">Passive and active thermal protection for avionics, satellites, and hypersonic vehicles.</div>
+            </div>
+          </a>
+
+          <!-- Card 6 -->
+          <a href="#solutions" onclick="closeProductsMenu()" class="prod-card"
+            style="text-decoration:none; display:block; border-radius:var(--radius-sm);
+                   background:var(--grey-95); border:1px solid var(--grey-80);
+                   overflow:hidden; transition:border-color 0.2s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease;">
+            <div style="height:110px; overflow:hidden; position:relative;">
+              <img src="https://placehold.co/280x110/0b0d1c/facc15?text=EV+Battery" alt="EV Battery"
+                style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s var(--ease-out-expo);" class="prod-img"/>
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(11,13,28,0.8) 0%, transparent 60%);"></div>
+              <span style="position:absolute; bottom:8px; left:10px; font-size:0.62rem; font-weight:700;
+                           text-transform:uppercase; letter-spacing:0.1em; color:#facc15;
+                           background:rgba(250,204,21,0.1); border:1px solid rgba(250,204,21,0.25);
+                           padding:2px 7px; border-radius:999px;">EV</span>
+            </div>
+            <div style="padding:0.85rem;">
+              <div style="font-size:0.85rem; font-weight:600; color:var(--text-headings); margin-bottom:0.3rem; font-family:var(--font-family-headings);">EV Battery Thermal</div>
+              <div style="font-size:0.76rem; color:var(--text-subtle); line-height:1.6;">Battery pack TMS design, cell-level cooling, and inverter heat dissipation for EVs.</div>
+            </div>
+          </a>
+
+        </div>
+      </div><!-- /products-menu -->
+
       <a href="#platform" class="nl">Solutions</a>
       <a href="#trust" class="nl">About</a>
       <a href="#contact" class="nl">Pricing</a>
@@ -321,6 +483,15 @@
     <a href="#contact" class="bp" style="font-size:0.82rem; padding:0.48rem 1.1rem;">Get started</a>
   </nav>
 </header>
+
+<style>
+  .prod-card:hover {
+    border-color: var(--grey-70) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 20px -8px rgba(102,51,238,0.25) !important;
+  }
+  .prod-card:hover .prod-img { transform: scale(1.06); }
+</style>
 
 
 <!-- ════════════════════ HERO ════════════════════ -->
@@ -1080,6 +1251,49 @@ void main(){ gl_Position = position; }`;
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
   document.querySelectorAll('.rv, .rvl, .rvr').forEach(el => io.observe(el));
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Products mega-menu dropdown
+  // ─────────────────────────────────────────────────────────────────────────
+  function toggleProductsMenu(e) {
+    e.stopPropagation();
+    const menu    = document.getElementById('products-menu');
+    const chevron = document.getElementById('products-chevron');
+    const isOpen  = menu.classList.contains('open');
+
+    if (isOpen) {
+      closeProductsMenu();
+    } else {
+      menu.classList.add('open');
+      menu.style.display = 'block';
+      requestAnimationFrame(() => {
+        menu.style.opacity   = '1';
+        menu.style.transform = 'translateY(0)';
+      });
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  function closeProductsMenu() {
+    const menu    = document.getElementById('products-menu');
+    const chevron = document.getElementById('products-chevron');
+    menu.classList.remove('open');
+    menu.style.opacity   = '0';
+    menu.style.transform = 'translateY(8px)';
+    if (chevron) chevron.style.transform = 'rotate(0deg)';
+    setTimeout(() => {
+      if (!menu.classList.contains('open')) menu.style.display = 'none';
+    }, 220);
+  }
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('products-menu');
+    const btn  = document.getElementById('products-btn');
+    if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+      closeProductsMenu();
+    }
+  });
 </script>
 
 </body>
